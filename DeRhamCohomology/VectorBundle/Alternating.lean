@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Heather Macbeth
 -/
 
-import Mathlib.Analysis.NormedSpace.Alternating.Basic
+
+import Mathlib.Analysis.Normed.Module.Alternating.Basic
 import Mathlib.Analysis.Normed.Module.Basic
 import Mathlib.Topology.VectorBundle.Basic
 import Mathlib.Topology.VectorBundle.Hom

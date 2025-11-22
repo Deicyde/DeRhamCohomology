@@ -1,7 +1,8 @@
 import Mathlib.Topology.Algebra.Module.Basic
 import Mathlib.Topology.Algebra.Module.Alternating.Basic
-import Mathlib.Analysis.NormedSpace.Alternating.Basic
-import Mathlib.Analysis.NormedSpace.OperatorNorm.Mul
+import Mathlib.Analysis.Normed.Module.Alternating.Basic
+import Mathlib.Analysis.Normed.Operator.Mul
+
 
 noncomputable section
 suppress_compilation
@@ -27,8 +28,6 @@ def _root_.LinearIsometryEquiv.flipAlternating :
   left_inv := sorry
   right_inv := sorry
   norm_map' := sorry
-
-#check ContinuousAlternatingMap.compContinuousLinearMapCLM
 
 
 -- TODO work out LinearIsometryEquiv from above to use here
