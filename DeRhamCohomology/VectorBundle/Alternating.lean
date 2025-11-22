@@ -120,7 +120,7 @@ change function between the two induced (pre)trivializations
 def continuousAlternatingMapCoordChange
     [e₁.IsLinear 𝕜] [e₁'.IsLinear 𝕜] [e₂.IsLinear 𝕜] [e₂'.IsLinear 𝕜] (b : B) :
     (F₁ [⋀^ι]→L[𝕜] F₂) →L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂) :=
-  ((e₁'.coordChangeL 𝕜 e₁ b).symm.continuousAlternatingMapCongr (e₂'.coordChangeL 𝕜 e₂ b) :
+  ((e₁'.coordChangeL 𝕜 e₁ b).symm.continuousAlternatingMapCongr (e₂.coordChangeL 𝕜 e₂' b) :
     (F₁ [⋀^ι]→L[𝕜] F₂) ≃L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂))
 
 variable [∀ x, TopologicalSpace (E₁ x)] [FiberBundle F₁ E₁]
@@ -135,7 +135,7 @@ theorem continuousOn_continuousAlternatingMapCoordChange
   let f₁ (b : B) : (F₁ [⋀^ι]→L[𝕜] F₂) →L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂)
     := ContinuousAlternatingMap.compContinuousLinearMapCLM (e₁'.coordChangeL 𝕜 e₁ b)
   let f₂ (b : B) : (F₁ [⋀^ι]→L[𝕜] F₂) →L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂)
-    := ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 F₁ F₂ F₂ (e₂'.coordChangeL 𝕜 e₂ b)
+    := ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 F₁ F₂ F₂ (e₂.coordChangeL 𝕜 e₂' b)
   have h₁ : ContinuousOn f₁ (e₁.baseSet ∩ e₁'.baseSet) := by
     let l : B → (F₁ →L[𝕜] F₁) := fun b ↦ (e₁'.coordChangeL 𝕜 e₁ b)
     have : f₁ = ContinuousAlternatingMap.compContinuousLinearMapCLM ∘ l := rfl
@@ -146,14 +146,13 @@ theorem continuousOn_continuousAlternatingMapCoordChange
       rw [inter_comm]
       exact continuousOn_coordChange 𝕜 e₁' e₁
   have h₂ : ContinuousOn f₂ (e₂.baseSet ∩ e₂'.baseSet) := by
-    let l : B → (F₂ →L[𝕜] F₂) := fun b ↦ (e₂'.coordChangeL 𝕜 e₂ b)
+    let l : B → (F₂ →L[𝕜] F₂) := fun b ↦ (e₂.coordChangeL 𝕜 e₂' b)
     have : f₂ = (ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 F₁ F₂ F₂) ∘ l := rfl
     rw [this]
     apply Continuous.comp_continuousOn
     · exact (ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 F₁ F₂ F₂).cont
     · dsimp [l]
-      rw [inter_comm]
-      exact continuousOn_coordChange 𝕜 e₂' e₂
+      exact continuousOn_coordChange 𝕜 e₂ e₂'
   have hf : continuousAlternatingMapCoordChange 𝕜 ι e₁ e₁' e₂ e₂' = fun b ↦ (f₂ b).comp (f₁ b) := by
     funext b
     apply ContinuousLinearMap.ext
@@ -324,17 +323,18 @@ theorem continuousAlternatingMapCoordChange_apply (b : B)
   (continuousAlternatingMap 𝕜 ι e₁' e₂'
     (TotalSpace.mk b ((continuousAlternatingMap 𝕜 ι e₁ e₂).symm b L))).2 := by
   ext v
-  have H : (e₁'.coordChangeL 𝕜 e₁ b) ∘ v = (e₁.linearMapAt 𝕜 b) ∘ (e₁'.symm b) ∘ v := by
+  have H₁ : (e₁'.coordChangeL 𝕜 e₁ b) ∘ v = (e₁.linearMapAt 𝕜 b) ∘ (e₁'.symm b) ∘ v := by
     ext i
     dsimp
     rw [e₁'.coordChangeL_apply e₁ ⟨hb.2.1, hb.1.1⟩, e₁.coe_linearMapAt_of_mem hb.1.1]
+  have H₂ (v : F₂) : (e₂.coordChangeL 𝕜 e₂' b) v = ((e₂'.linearMapAt 𝕜 b) ∘ (e₂.symm b)) v := by
+    dsimp
+    rw [e₂.coordChangeL_apply e₂' ⟨hb.1.2, hb.2.2⟩, e₂'.coe_linearMapAt_of_mem hb.2.2]
+  have H₂' : Trivialization.coordChangeL 𝕜 e₂ e₂' b = (e₂'.linearMapAt 𝕜 b) ∘ (e₂.symm b) := by
+    ext v
+    exact H₂ v
   simp [Pretrivialization.continuousAlternatingMap_apply, continuousAlternatingMapCoordChange,
-    Pretrivialization.continuousAlternatingMap_symm_apply' _ _ _ _ hb.1,
-    e₂.coordChangeL_apply e₂' ⟨hb.1.2, hb.2.2⟩, H]
-  rw [e₂'.coe_linearMapAt_of_mem hb.2.2]
-  sorry
-
-  -- FIXME this could ideally be combined with the previous simp
+    Pretrivialization.continuousAlternatingMap_symm_apply' _ _ _ _ hb.1, H₁, H₂']
 
 end Pretrivialization
 
