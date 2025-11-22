@@ -28,6 +28,9 @@ def _root_.LinearIsometryEquiv.flipAlternating :
   right_inv := sorry
   norm_map' := sorry
 
+#check ContinuousAlternatingMap.compContinuousLinearMapCLM
+
+
 -- TODO work out LinearIsometryEquiv from above to use here
 def compContinuousAlternatingMap₂ (f : N →L[𝕜] N' →L[𝕜] N'')
     (g : M [⋀^ι]→L[𝕜] N) (h : M' [⋀^ι']→L[𝕜] N') : M [⋀^ι]→L[𝕜] M' [⋀^ι']→L[𝕜] N'' where
@@ -53,6 +56,21 @@ theorem compContinuousAlternatingMap₂_lsmul_apply
   rfl
 
 end ContinuousLinearMap
+
+namespace ContinuousAlternatingMap
+variable
+  {𝕜 : Type*} [NontriviallyNormedField 𝕜]
+  {M : Type*} [NormedAddCommGroup M] [NormedSpace 𝕜 M]
+  {M' : Type*} [NormedAddCommGroup M'] [NormedSpace 𝕜 M']
+  {N : Type*} [NormedAddCommGroup N] [NormedSpace 𝕜 N]
+  {ι : Type*} [Fintype ι]
+  {ι' : Type*} [Fintype ι']
+
+
+--TODO: Move to Mathlib.Topology.Algebra.Module.Alternating.Basic
+theorem compContinuousAlternatingMapCLM_cont :
+  Continuous (ContinuousAlternatingMap.compContinuousLinearMapCLM : (M →L[𝕜] M') → (M' [⋀^ι]→L[𝕜] N) →L[𝕜] (M [⋀^ι]→L[𝕜] N))
+  := sorry
 
 namespace ContinuousMultilinearMap
 
